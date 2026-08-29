@@ -1,0 +1,46 @@
+{
+  "skill_name": "project-summary-optimizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "ไฟล์ PROJECT_SUMMARY.md ของเรายาวเกินไปแล้ว ช่วย optimize ย้ายประวัติเก่าไปเก็บใน archive แล้วทำสรุปกระชับให้หน่อย",
+      "expected_output": "Detects PROJECT_SUMMARY.md, moves historical sessions to docs/archive/PROJECT_SUMMARY_ARCHIVE.md, and reformats the primary summary into a high-density 5-part structure under 150 lines.",
+      "assertions": [
+        {
+          "text": "Main summary is under 150 lines",
+          "passed": true
+        },
+        {
+          "text": "Archive file contains all historical sessions with zero data loss",
+          "passed": true
+        },
+        {
+          "text": "All markdown file links are valid and clickable",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/optimize-summary",
+      "expected_output": "Executes project summary optimization workflow automatically.",
+      "assertions": [
+        {
+          "text": "Triggers project-summary-optimizer workflow",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "สรุป project_summary.md ให้สั้นลงหน่อย context บวมมาก",
+      "expected_output": "Case-insensitively locates project_summary.md, archives past logs, and condenses active architecture.",
+      "assertions": [
+        {
+          "text": "Locates project_summary.md regardless of casing",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}
