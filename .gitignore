@@ -39,3 +39,9 @@ pnpm-debug.log*
 scratch/
 tmp/
 temp/
+
+# Local Project State & Continuity (Antigravity / Private Notes)
+PROJECT_SUMMARY.md
+PROJECT_SUMMARY_ARCHIVE.md
+project_summary.md
+

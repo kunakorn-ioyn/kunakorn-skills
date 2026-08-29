@@ -121,7 +121,6 @@ description: High-density description of what the skill accomplishes and exact s
 ├── .gitignore                    # Standard ignore rules
 ├── CONTRIBUTING.md               # Guide for contributing new skills
 ├── LICENSE                       # MIT License
-├── PROJECT_SUMMARY.md            # Living state & continuity record
 └── README.md                     # Repository documentation
 ```
 
