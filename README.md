@@ -54,7 +54,7 @@ The skills are categorized into 6 specialized domains:
 | :--- | :--- | :--- |
 | [**`troubleshooting-codex`**](./skills/troubleshooting-codex/SKILL.md) | Systematic capture and indexing of bugs, root causes, and golden prevention rules into a living lessons-learned codex. | `/record-lesson`, `/troubleshooting-codex`, `บันทึกเป็นบทเรียน`, `never repeat`, `อย่าพลาดอีก` |
 | [**`daily-devlog-recorder`**](./skills/daily-devlog-recorder/SKILL.md) | Multi-layer change detection engine (FS Timestamps, Git Diff/Log, Active Session Context) recording daily progress into Keep-a-Changelog standard devlogs. | `/daily-log`, `/changelog`, `/devlog`, `สรุปงานวันนี้`, `บันทึกสิ่งที่แก้ไขวันนี้`, `จบงานวันนี้` |
-| [**`project-summary-optimizer`**](./skills/project-summary-optimizer/SKILL.md) | Archives verbose session logs and compacts `PROJECT_SUMMARY.md` into high-density reference docs to prevent LLM context window bloating. | `/optimize-summary`, `/project-summary-optimizer`, `clean up summary`, `shrink devlog` |
+| [**`project-summary-optimizer`**](./skills/project-summary-optimizer/SKILL.md) | Full lifecycle manager for `PROJECT_SUMMARY.md`. Autonomously scans codebase to scaffold fresh baseline summaries, and intelligently compacts/archives bloated files to prevent token bloat. | `/setup-summary`, `/init-summary`, `/optimize-summary`, `สร้างไฟล์สรุปโปรเจกต์`, `setup project summary`, `clean up summary` |
 
 ---
 

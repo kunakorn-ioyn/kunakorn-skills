@@ -1,129 +1,136 @@
 ---
 name: project-summary-optimizer
-description: Optimize, compact, and archive long PROJECT_SUMMARY.md files (case-insensitive e.g. project_summary.md, Project_Summary.md) across software projects to prevent LLM context window bloating. Extracts historical session logs into a structured archive file (docs/archive/PROJECT_SUMMARY_ARCHIVE.md or PROJECT_SUMMARY_ARCHIVE.md) while consolidating core architecture, active sprint context, recent sessions, test suites, and roadmap into a high-density, context-efficient main summary. Trigger on /optimize-summary, /project-summary-optimizer, or whenever the user asks to clean up, compact, split, shrink, or archive long project summaries or devlogs.
+description: Full lifecycle manager for PROJECT_SUMMARY.md (case-insensitive e.g. project_summary.md, Project_Summary.md) across software projects. Automatically scaffolds and initializes fresh baseline summaries from codebase analysis (detecting stack, entry points, database, and recent git history), and intelligently compacts/archives bloated summaries (>150-200 lines) into structured archives (docs/archive/PROJECT_SUMMARY_ARCHIVE.md) to eliminate LLM token bloat while guaranteeing 100% historical continuity. Trigger on /setup-summary, /init-summary, /scaffold-summary, /optimize-summary, /project-summary-optimizer, "สร้างไฟล์สรุปโปรเจกต์", "setup project summary", "สร้าง project_summary.md", "เริ่มต้น project summary", "clean up summary", or "shrink devlog".
 ---
 
-# Project Summary Optimizer
+# Project Summary Lifecycle Manager (Setup & Optimizer)
 
-A specialized skill for archiving historical logs and synthesizing long `PROJECT_SUMMARY.md` files into ultra-lean, high-density reference documents that maximize LLM context efficiency without losing critical engineering continuity.
-
----
-
-## 🎯 Purpose & Why This Matters
-
-As software projects evolve over days and weeks, `PROJECT_SUMMARY.md` files naturally grow from concise overviews into multi-thousand-line session logs. When an AI assistant (or human developer) loads this file into the context window on every prompt or task compaction, it:
-1. Consumes tens of thousands of tokens unnecessarily (Context Bloat).
-2. Dilutes attention across outdated debug histories from past months.
-3. Increases latency and costs without adding actionable value.
-
-**The Solution:**
-Preserve **100% of historical detail** in a dedicated archive file, while maintaining a **lean, structured, high-density main summary** (under 100–150 lines) focused strictly on what is needed to build, verify, and continue active work.
+An autonomous lifecycle skill for **scaffolding, initializing, maintaining, and optimizing** living `PROJECT_SUMMARY.md` files across software projects. It ensures AI assistants and engineering teams always have instant, high-density project context without bloating LLM context windows.
 
 ---
 
-## 🔄 Execution Workflow
+## 🎯 Purpose & The Dual Challenge
 
-Follow these 5 steps in sequence when optimizing a project summary:
+1. **The Blank Canvas Problem (Starting a Project)**:
+   - When onboarding an AI agent onto a new or existing repository without a summary file, the agent wastes tokens repeatedly rediscovering the stack, entry points, and recent work.
+   - **Solution (Mode 1 - Setup)**: Autonomously scan project files, configuration, and git history to generate a complete, standardized baseline summary in under 30 seconds.
+
+2. **The Context Bloat Problem (Project Growth)**:
+   - As projects evolve over weeks, `PROJECT_SUMMARY.md` expands into thousands of lines of obsolete debugging logs, diluting AI attention and burning tokens.
+   - **Solution (Mode 2 - Optimize)**: Move historical logs to `docs/archive/PROJECT_SUMMARY_ARCHIVE.md` with zero data loss, keeping the main summary lean (80–150 lines).
+
+---
+
+## 🔄 Dual Operational Modes
+
+The skill automatically selects or switches modes based on user intent and repository state:
 
 ```
-[1. Discover File] ──> [2. Evaluate Size] ──> [3. Archive History] ──> [4. Synthesize Main] ──> [5. Verify Integrity]
+                                [Check Repository State]
+                                           │
+                    ┌──────────────────────┴──────────────────────┐
+                    ▼                                             ▼
+        [File Missing or /init requested]             [File Exists & Bloated]
+                    │                                             │
+             ▼ MODE 1: SETUP                               ▼ MODE 2: OPTIMIZE
+       1. Auto-Scan Codebase                         1. Evaluate Line Count
+       2. Extract Stack & Entry points               2. Extract Historical Logs
+       3. Analyze Recent Git History                 3. Write to Archive File
+       4. Scaffold Clean Baseline                    4. Condense Main Summary
 ```
 
 ---
 
-### Step 1: Case-Insensitive File Discovery
+## 🛠️ Mode 1: Automated Discovery & Setup (Init Mode)
 
-Locate the project summary file regardless of casing or directory location:
-- Primary locations: `./PROJECT_SUMMARY.md`, `./project_summary.md`, `./Project_Summary.md`, `./docs/PROJECT_SUMMARY.md`
-- If no summary file exists, notify the user and offer to create a new baseline summary using the template in `references/template.md`.
+Triggered when:
+- User calls `/setup-summary`, `/init-summary`, `/scaffold-summary`, or asks *"สร้างไฟล์สรุปโปรเจกต์"*, *"setup project summary"*
+- OR when `PROJECT_SUMMARY.md` (any casing) does not exist in the repository.
 
----
+### Step 1: Codebase Deep Discovery
+Run non-destructive read operations to extract foundational context:
+1. **Tech Stack & Dependencies**:
+   - Inspect package manifests: `package.json`, `composer.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `pom.xml`, `Cargo.toml`.
+   - Identify language version, web framework, runtime, and key libraries.
+2. **Database & Persistence**:
+   - Look for ORM schemas, database migrations, or SQL files (`migrations/`, `prisma/`, `schema.sql`, `models/`, `.env.example`).
+3. **Application Entry Points & Module Map**:
+   - Locate main entry files (e.g. `index.html`, `src/App.tsx`, `src/index.ts`, `server.js`, `api/`, `routes/`, `app.py`).
+4. **Active Development Focus & Git History**:
+   - Run `git log -n 5 --oneline` and `git status` to see what was recently committed or is currently in progress.
+5. **Test Framework & Verification Commands**:
+   - Detect test suites (`npm test`, `pytest`, `phpunit`, `go test`, etc.).
 
-### Step 2: Inspection & Archival Threshold Evaluation
+### Step 2: Scaffold Standard Baseline
+Generate `PROJECT_SUMMARY.md` adhering strictly to Rule 1 and the high-density standard:
 
-Analyze the current line count and content structure:
-- **Optimal Target**: 80–150 lines in the primary summary.
-- **Threshold for Archival**: If the file exceeds **180–200 lines** or contains more than **3–4 historical sessions**, trigger the optimization & archival process.
-
-Identify content blocks:
-1. **System Identity & Architecture**: Tech stack, core modules, database tables, auth/storage models (KEEP & DENSE-IFY).
-2. **Current Sprint / Active Work**: Last 1–3 active sessions, recent architectural decisions (KEEP).
-3. **Older Historical Sessions**: Past debug logs, outdated sprint notes from weeks/months ago (MOVE TO ARCHIVE).
-4. **Automated Test Matrix**: Test commands and pass/fail status (KEEP & TABULATE).
-5. **Future Roadmap / Backlog**: Upcoming planned tasks (KEEP).
-
----
-
-### Step 3: Archive Historical Logs
-
-Create or append to the archive file:
-- **Default Archive Path**: `docs/archive/PROJECT_SUMMARY_ARCHIVE.md` (or `PROJECT_SUMMARY_ARCHIVE.md` in the root if no `docs/` folder exists).
-- **Format**: Chronological Markdown log with session dates, titles, and detailed bullet points.
-- **Zero Data Loss Rule**: Never delete or summarize away historical decisions in the archive file; preserve the full original fidelity so it can be referenced whenever deep archaeology is required.
-
----
-
-### Step 4: Synthesize the High-Density Main Summary
-
-Rewrite the primary `PROJECT_SUMMARY.md` using the standard 5-part architecture:
-
-#### 1. Header & Quick Meta
 ```markdown
 # Project Summary: [Project Name]
 
-> **Repository Status**: [Active Development / Staging / Production]  
-> **Target Architecture**: [Tech Stack, Framework, Database, Storage Layer]  
-> **Historical Archive**: See [docs/archive/PROJECT_SUMMARY_ARCHIVE.md](file:///path/to/archive) for past session logs.
-```
+## 1. Overview & Objective
+- **Project Goal**: [Concise 1–2 sentence description of the system]
+- **Tech Stack & Environment**: [Runtime, Framework, Database, Styling/Tooling]
+- **Target Architecture**: [Monolith / Client-Server / Microservices / CLI]
 
-#### 2. System Architecture & Module Map (Table)
-Summarize all core modules, file entry points, and readiness states in a clear Markdown table:
-```markdown
-## 🏛️ System Architecture & Module Map
-
-| Module | Core Files | Responsibility | Status |
+## 2. System Architecture & Module Map
+| Module | Core Files / Directories | Responsibility | Status |
 | :--- | :--- | :--- | :--- |
-| **Auth** | `login.php`, `auth/` | Session management, RBAC | ✅ Production Ready |
-| **Core Feature** | `feature/index.php` | Main workflow engine | ✅ Active |
+| **Auth / Core** | `src/auth/` | Session management & authentication | ✅ Ready |
+| **API Engine** | `src/api/` | REST / GraphQL endpoints | 🔄 In Progress |
+
+## 3. Current State & Progress
+- [x] Initialized architecture and core modules
+- [/] Active feature in progress
+- [ ] Upcoming priority milestone
+
+## 4. Key Technical Decisions
+- **[Technology/Architecture]**: [Decision made] — *Rationale:* [Brief reason why]
+
+## 5. Automated Test Suites & Verification
+| Test Suite | Purpose | Command | Status |
+| :--- | :--- | :--- | :--- |
+| Unit / Integration | Core logic verification | `npm test` | ✅ Passing |
+
+## 6. Known Issues & Constraints
+- [Active blockers or architectural constraints, or "None"]
+
+## 7. Next Steps
+1. [Immediate next actionable item]
+2. [Subsequent milestone task]
 ```
-
-#### 3. Active Phase / Recent Engineering Work
-Highlight only the last 1–3 relevant sessions with concrete technical decisions and file links:
-```markdown
-## 🚀 Active Phase: [Current Feature / Sprint Focus]
-
-### 1. [Recent Major Feature] ([path/to/file](file:///...))
-- Summary of architecture change, key parameters, and design patterns.
-```
-
-#### 4. Automated Test Matrix & Verification Commands
-A single tabular matrix of verification tests and their latest execution status:
-```markdown
-## 🧪 Automated Test Suites & Verification
-
-| Test Suite | Purpose | Status |
-| :--- | :--- | :--- |
-| `tests/test_feature.php` | Unit & integration validation | ✅ 100% PASS |
-```
-
-#### 5. Future Roadmap & Architectural Backlog
-Clear list of upcoming features, technical debt to refactor, or security hardening items.
 
 ---
 
-### Step 5: Verification & Integrity Checklist
+## ⚡ Mode 2: Archival & Token Optimization (Optimizer Mode)
 
-Before finalizing, verify:
+Triggered when:
+- User calls `/optimize-summary`, `/project-summary-optimizer`, or asks *"clean up summary"*, *"shrink devlog"*, *"บีบอัด summary"*
+- OR when the file exceeds **180–200 lines** or contains **>3 historical sessions**.
+
+### Step 1: Evaluate Size & Partition Content
+Analyze the file into 4 functional buckets:
+1. **Core Identity & Architecture (KEEP & DENSE-IFY)**: Tech stack, modules table, database definitions.
+2. **Active Sprint / Recent Work (KEEP)**: Only the last 1–2 active sessions and current WIP tasks.
+3. **Older Historical Logs (MOVE TO ARCHIVE)**: Previous sprint logs, fixed bugs from past weeks/months.
+4. **Test Commands & Roadmap (KEEP & TABULATE)**: Keep test table and active backlog.
+
+### Step 2: Write / Append to Historical Archive
+- **Destination**: `docs/archive/PROJECT_SUMMARY_ARCHIVE.md` (or `PROJECT_SUMMARY_ARCHIVE.md` in root if no `docs/` folder exists).
+- **Format**: Chronological Markdown log with dates, session titles, and full detail.
+- **Zero Data Loss Rule**: Never discard architectural rationale or historical context; store 100% of historical detail in the archive file.
+
+### Step 3: Rewrite High-Density Main Summary
+Rewrite `PROJECT_SUMMARY.md` keeping it strictly under **80–150 lines**:
+- Add top reference link to archive: `> **Historical Archive**: See [PROJECT_SUMMARY_ARCHIVE.md](file:///path/to/archive)`
+- Use Markdown tables rather than verbose paragraphs.
+- Keep only immediate next steps and recent architectural changes.
+
+---
+
+## ✅ Quality Checklist
+
+Before completing either mode:
 - [ ] Primary summary is concise (<150 lines) and readable in under 60 seconds.
-- [ ] All file paths in Markdown links are valid and clickable (`file:///...`).
-- [ ] No active roadmap items or test commands were accidentally omitted.
-- [ ] Archive file exists, is linked from the main summary, and contains all historical sessions.
-- [ ] Automated tests continue to pass without error.
-
----
-
-## 📌 Summary of Operating Rules
-
-1. **Case-Insensitive Agnostic**: Handle `PROJECT_SUMMARY.md`, `project_summary.md`, or any case variation seamlessly.
-2. **High Information Density**: Prefer structured Markdown tables and bulleted key-value pairs over conversational paragraphs.
-3. **Continuous Maintainability**: Every time this skill runs on a project, it keeps the main file permanently within the optimal 100–150 line zone.
+- [ ] File links use valid Markdown file URIs (`file:///...`).
+- [ ] If archival was performed, archive file is created, linked, and verified.
+- [ ] Tech stack and verification commands accurately reflect the current repo.
