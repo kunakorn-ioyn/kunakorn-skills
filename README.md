@@ -64,6 +64,7 @@ The skills are categorized into 6 specialized domains:
 | [**`capstone-thesis-generator`**](./skills/capstone-thesis-generator/SKILL.md) | Autonomous generator of complete 5-chapter Thai University Graduation Project / Capstone Theses in Word (.docx) format with Selenium live screenshots, full Data Dictionaries, and Black-box test matrices. | `/thesis`, `/capstone-thesis`, `/academic-report`, `/generate-thesis`, `ทำเล่มจบ`, `สร้างเล่มปริญญานิพนธ์`, `ทำรายงานโครงงาน 5 บท` |
 | [**`km-system-report-generator`**](./skills/km-system-report-generator/SKILL.md) | Official Knowledge Management (KM) and Full System Engineering Report generator in Word (.docx) format aligned with official university KM standards. | `/km-report`, `/full-report`, `/generate-doc`, `สร้างรายงานฉบับเต็ม`, `ทำเอกสาร KM`, `สร้างรายงาน Word` |
 | [**`doc-coauthoring`**](./skills/doc-coauthoring/SKILL.md) | Structured collaborative document creation across 3 stages: Context Gathering, Refinement & Structure, and Reader Testing. | `write a doc`, `draft a proposal`, `create a spec`, `co-author doc` |
+| [**`vu-exam-exporter`**](./skills/vu-exam-exporter/SKILL.md) | ดึงข้อมูลคะแนนสอบ ผลสอบรายบุคคล คำตอบรายข้อ และวิเคราะห์คุณภาพข้อสอบ (Item Analysis: ค่าความยาก $p$, อำนาจจำแนก $r$) จากระบบ VU Exam Manage Summative ออกมาเป็นไฟล์ Excel 5 แผ่นงานแบบสมบูรณ์ รองรับโหมดถามทีละขั้น (Interactive Wizard) หรือระบุรหัสสอบทันที | `/vu-exam-exporter`, `ดึงคะแนนสอบ`, `VU Exam`, `วิเคราะห์ข้อสอบ`, `ทำรายงานผลสอบ`, `export exam`, `summative exam` |
 
 ---
 
