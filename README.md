@@ -24,7 +24,7 @@
 
 ## 🌟 Overview
 
-This repository contains a curated collection of dynamic **Agent Skills** designed to supercharge autonomous AI engineering. Each skill acts as a specialized instruction module that equips AI agents (such as Google Antigravity, Gemini, and Claude/Cursor) with domain-specific workflows, zero-repetition error handling, continuous deployment automation, UX/UI hardening, academic report generation, and Obsidian knowledge synchronization.
+This repository contains a curated collection of dynamic **Agent Skills** designed to supercharge autonomous AI engineering. Each skill acts as a specialized instruction module that equips AI agents (such as Google Antigravity, Gemini, and Claude/Cursor) with domain-specific workflows, zero-repetition error handling, continuous deployment automation, UX/UI hardening, academic report generation, exam item analysis & grading automation, and Obsidian knowledge synchronization.
 
 ---
 
@@ -91,7 +91,7 @@ Clone the repository and run the installer script:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/ioynnightwalkerfly/kunakorn-skills.git
+git clone https://github.com/kunakorn-ioyn/kunakorn-skills.git
 cd kunakorn-skills
 
 # 2. Run Installer
@@ -169,7 +169,7 @@ description: High-density description of what the skill accomplishes and exact s
 │   ├── install.ps1                  # Windows PowerShell installer
 │   ├── install.sh                   # macOS & Linux Bash installer
 │   └── sync-from-global.ps1         # Sync skills from global config to repo
-├── skills/                          # 📦 Curated collection of 15 AI skills
+├── skills/                          # 📦 Curated collection of 16 AI skills
 │   ├── aapanel-git-autodeploy/      # aaPanel CI/CD WebHook deployment
 │   ├── capstone-thesis-generator/   # Thai university 5-chapter thesis generator (.docx)
 │   ├── daily-devlog-recorder/       # 4-layer changelog & daily devlog recorder
@@ -184,6 +184,7 @@ description: High-density description of what the skill accomplishes and exact s
 │   ├── universal-project-manager/   # Master project orchestrator & Obsidian tracker
 │   ├── ux-feature-architect/        # UX/UI usability & developer blindspots architect
 │   ├── visual-entity-forge/         # Image-to-entity designer for beasts & items
+│   ├── vu-exam-exporter/            # VU Exam Manage Summative extractor & item analysis (.xlsx)
 │   └── webapp-doc-architect/        # Web app manuals & specs generator (.docx, .pptx, PDF)
 ├── .gitignore                       # Standard ignore rules
 ├── CONTRIBUTING.md                  # Guide for contributing new skills
